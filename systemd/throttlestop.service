@@ -1,0 +1,15 @@
+[Unit]
+Description=ThrottleStop for Linux - Universal HP Laptop Power Management Daemon
+Documentation=https://github.com/walsoup/throttlestop-hp-linux
+After=multi-user.target thermal-daemon.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/throttlestop --daemon
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

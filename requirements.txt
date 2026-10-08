@@ -1,0 +1,10 @@
+# Core requirements:
+# Python >= 3.8 standard library (os, sys, subprocess, struct, glob, re, math, etc.)
+
+# Optional GUI dependencies (for GTK/libhandy graphical dashboard):
+# Debian / Ubuntu / Linux Mint / Zorin OS:
+#   sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-handy-1
+# Fedora / RHEL:
+#   sudo dnf install python3-gobject gtk3 libhandy
+# Arch Linux / Manjaro:
+#   sudo pacman -S python-gobject gtk3 libhandy

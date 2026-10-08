@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# ThrottleStop for Linux - Universal HP Laptop Power & Telemetry Launcher
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONPATH="$DIR:$PYTHONPATH"
+
+# If arguments provided, run CLI directly
+if [ "$#" -gt 0 ]; then
+    python3 "$DIR/power_profile.py" "$@"
+    exit $?
+fi
+
+# If DISPLAY or WAYLAND_DISPLAY is available and PyGObject / libhandy is installed, launch GUI
+if [ -n "$DISPLAY" ] || [ -n "$WAYLAND_DISPLAY" ]; then
+    if python3 -c "import gi; gi.require_version('Gtk', '3.0'); gi.require_version('Handy', '1'); from gi.repository import Gtk, Handy" 2>/dev/null; then
+        python3 "$DIR/power_profile.py" --gui
+        exit $?
+    fi
+fi
+
+# Fallback to interactive Terminal UI (TUI)
+python3 "$DIR/power_profile.py" --tui

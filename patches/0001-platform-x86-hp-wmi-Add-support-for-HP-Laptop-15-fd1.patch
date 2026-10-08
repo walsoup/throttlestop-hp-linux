@@ -1,0 +1,46 @@
+From 45fea5b6ede85554ff9d2306b94edadf713b1e55 Mon Sep 17 00:00:00 2001
+From: Walid Elonok <walidelonk@gmail.com>
+Date: Sun, 13 Sep 2026 06:26:56 +0100
+Subject: [PATCH] platform/x86: hp-wmi: Add support for HP Laptop 15-fd1xxx
+ (board 8DE1)
+
+On the HP Laptop 15-fd1xxx (motherboard ID 8DE1), hp-wmi currently falls
+back to the legacy HPWMI_FAN_SPEED_GET_QUERY (0x11) command because the
+board is not listed in hp_wmi_feature_boards[].
+
+In HP BIOS DSDT table (e.g. BIOS F.26), method GM11 (query 0x11) is a
+dummy stub that returns 4 bytes of 0x00 with return code 0 (success),
+causing the driver to report 0 RPM via hwmon even while the fan is
+actively spinning.
+
+However, the DSDT implements method GM2D (query 0x2D / Victus S fan
+interface), which reads the active fan tachometer directly from the
+Embedded Controller (EC0) registers RPM1/RPM2 and reports accurate fan
+speed.
+
+Add board ID "8DE1" to hp_wmi_feature_boards[] mapped to
+victus_s_board_params so hp-wmi uses the working query 0x2D interface.
+
+Signed-off-by: Walid Elonok <walidelonk@gmail.com>
+---
+ drivers/platform/x86/hp/hp-wmi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+index b2773fc1a..fd9189420 100644
+--- a/drivers/platform/x86/hp/hp-wmi.c
++++ b/drivers/platform/x86/hp/hp-wmi.c
+@@ -339,6 +339,10 @@ static const struct dmi_system_id hp_wmi_feature_boards[] __initconst = {
+ 		.matches = { DMI_MATCH(DMI_BOARD_NAME, "8DD6") },
+ 		.driver_data = (void *)&omen_v1_no_ec_thermal_params,
+ 	},
++	{
++		.matches = { DMI_MATCH(DMI_BOARD_NAME, "8DE1") },
++		.driver_data = (void *)&victus_s_board_params,
++	},
+ 	{
+ 		.matches = { DMI_MATCH(DMI_BOARD_NAME, "8E35") },
+ 		.driver_data = (void *)&omen_v1_legacy_board_params,
+-- 
+2.43.0
+

@@ -1,0 +1,22 @@
+# Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Backups and temporary files
+*.bak
+*.bak_*
+*.swp
+*~
+*.tmp
+
+# Environment & IDE
+.venv/
+env/
+venv/
+.idea/
+.vscode/
+
+# Run logs
+*.log
+*.csv

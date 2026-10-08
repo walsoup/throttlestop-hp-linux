@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ThrottleStop HP
+Comment=Hardware Power Management & Telemetry for HP Laptops
+Exec=throttlestop --gui
+Icon=utilities-system-monitor
+Terminal=false
+Type=Application
+Categories=System;Settings;HardwareSettings;
+Keywords=throttlestop;power;undervolt;rapl;fan;hp;battery;performance;
+StartupNotify=true
